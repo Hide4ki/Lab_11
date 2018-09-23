@@ -55,7 +55,6 @@ int main(void)
 		SetConsoleTextAttribute (hStdout, 7 );
 		printf("%s",word);
 	}
-	SetConsoleTextAttribute (hStdout, 7 );
 	getchar();
 	return 0;
 }
