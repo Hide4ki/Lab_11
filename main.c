@@ -27,7 +27,7 @@ int main(void)
 		f = 0;
 		while(*l)
 		{
-			if(*l=='\"')
+			if(*l=='\"' && ((l-1<line)||*(l-1)!='\\'))
 			{
 				if(f)
 				{
@@ -51,15 +51,9 @@ int main(void)
 			}
 			*w++ = *l++;
 		}
-		if(w)
-		{
-			*w = '\0';
-			SetConsoleTextAttribute (hStdout, 7 );
-			printf("%s",word);
-			f = 1;
-			w = word;
-			*w = '\0';
-		}
+		*w = '\0';
+		SetConsoleTextAttribute (hStdout, 7 );
+		printf("%s",word);
 	}
 	SetConsoleTextAttribute (hStdout, 7 );
 	getchar();
