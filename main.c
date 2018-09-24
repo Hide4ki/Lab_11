@@ -12,10 +12,11 @@ int main(void)
 	char word[LEN];
 	char *l;
 	char *w;
+	int b;
 	int f;
 	char *pt;
 	WORD Color;
-	hStdout = GetStdHandle (STD_OUTPUT_HANDLE);
+	hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	Color = BACKGROUND_INTENSITY | BACKGROUND_GREEN | FOREGROUND_INTENSITY | FOREGROUND_RED;
 	if(!(fin = fopen("input.txt","r")))
 		return 1;
@@ -27,13 +28,15 @@ int main(void)
 		f = 0;
 		while(*l)
 		{
-			if(*l=='\"' && ((l-1<line)||*(l-1)!='\\'))
+			if(*l=='\"')
 			{
-				if(f)
+				b=0;
+				while(l-b>=line && *(l-b)=='\\') b++;
+				if(f && !(b&1))
 				{
 					*w++ = *l++;
 					*w = '\0';
-					SetConsoleTextAttribute (hStdout, Color );	
+					SetConsoleTextAttribute(hStdout, Color );	
 					printf("%s",word);				
 					f = 0;
 					w = word;
@@ -42,7 +45,7 @@ int main(void)
 				else
 				{
 					*w = '\0';
-					SetConsoleTextAttribute (hStdout, 7 );
+					SetConsoleTextAttribute(hStdout, 7 );
 					printf("%s",word);
 					f = 1;
 					w = word;
@@ -52,7 +55,7 @@ int main(void)
 			*w++ = *l++;
 		}
 		*w = '\0';
-		SetConsoleTextAttribute (hStdout, 7 );
+		SetConsoleTextAttribute(hStdout, 7 );
 		printf("%s",word);
 	}
 	getchar();
