@@ -3,6 +3,7 @@
 #include <Windows.h>
 
 #define LEN 1000
+#define SCOLOR 7
 
 int main(void)
 {
@@ -12,50 +13,52 @@ int main(void)
 	char word[LEN];
 	char *l;
 	char *w;
-	int b;
+	int k;
 	int f;
-	char *pt;
+	int pop_y;
 	WORD Color;
 	hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	Color = BACKGROUND_INTENSITY | BACKGROUND_GREEN | FOREGROUND_INTENSITY | FOREGROUND_RED;
-	if(!(fin = fopen("input.txt","r")))
+	if(!(fin = fopen("input.txt","r"))) 
 		return 1;
 	while(fgets(line,sizeof(line),fin))
 	{
 		l = line;
 		w = word;
-		*w = '\0';
 		f = 0;
 		while(*l)
 		{
+			pop_y = 0;
 			if(*l=='\"')
 			{
-				b=0;
-				while(l-b>=line && *(l-b)=='\\') b++;
-				if(f && !(b&1))
+				k = 0;
+				while(l-k-1 >= line && *(l-k-1) == '\\') k++;
+				if(!(k&1))
 				{
-					*w++ = *l++;
-					*w = '\0';
-					SetConsoleTextAttribute(hStdout, Color );	
-					printf("%s",word);				
-					f = 0;
-					w = word;
-					*w = '\0';
-				}
-				else
-				{
-					*w = '\0';
-					SetConsoleTextAttribute(hStdout, 7 );
-					printf("%s",word);
-					f = 1;
-					w = word;
-					*w = '\0';
+					if(f)
+					{
+						*w++ = *l++;
+						*w = '\0';
+						SetConsoleTextAttribute(hStdout, Color );	
+						printf("%s",word);				
+						f = 0;
+						pop_y = 1;
+						w = word;
+					}
+					else
+					{
+						*w = '\0';
+						SetConsoleTextAttribute(hStdout, SCOLOR );
+						printf("%s",word);
+						f = 1;
+						w = word;
+					}
 				}
 			}
-			*w++ = *l++;
+			if(!pop_y)*w++ = *l++;
 		}
 		*w = '\0';
-		SetConsoleTextAttribute(hStdout, 7 );
+		SetConsoleTextAttribute(hStdout, SCOLOR );
 		printf("%s",word);
 	}
 	getchar();
